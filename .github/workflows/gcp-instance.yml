@@ -1,0 +1,26 @@
+name: Create GCP Compute Instance
+
+on:
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  create-instance:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Create Compute Engine instance
+        run: |
+          gcloud compute instances create "github-action-instance" \
+            --zone "us-central1-a" \
+            --machine-type "e2-micro" \
+            --image-family "debian-11" \
+            --image-project "debian-cloud"

@@ -24,7 +24,7 @@ jobs:
       - name: Create Compute Engine instance
         run: |
           gcloud compute instances create "github-action-instance" \
-            --zone "us-west1" \
+            --zone "us-west1-a" \
             --machine-type "e2-micro" \
             --image-family "debian-11" \
             --image-project "debian-cloud"

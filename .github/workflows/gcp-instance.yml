@@ -1,7 +1,7 @@
 name: Create GCP Compute Instance
 
 on:
-  workflow_dispatch:  # Allows manual trigger
+  workflow_dispatch:  # Allows manual trigger from GitHub UI
 
 jobs:
   create-instance:
@@ -11,11 +11,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Google Cloud SDK
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Set up gcloud CLI
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
 
       - name: Create Compute Engine instance
         run: |
@@ -24,3 +28,4 @@ jobs:
             --machine-type "e2-micro" \
             --image-family "debian-11" \
             --image-project "debian-cloud"
+
